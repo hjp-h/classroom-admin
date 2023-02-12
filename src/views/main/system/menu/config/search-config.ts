@@ -12,12 +12,12 @@ export const searchFormConfig: IForm = {
     },
     {
       field: 'createAt',
-      type: 'datepicker',
+      type: 'date',
       label: '创建时间'
     },
     {
       field: 'updateAt',
-      type: 'datepicker',
+      type: 'date',
       label: '更新时间'
     }
   ]

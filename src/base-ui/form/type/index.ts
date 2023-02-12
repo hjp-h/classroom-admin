@@ -1,4 +1,12 @@
-type IFormItemType = 'select' | 'password' | 'input' | 'datepicker' | 'textarea'
+type IFormItemType =
+  | 'select'
+  | 'password'
+  | 'input'
+  | 'textarea'
+  | 'date'
+  | 'datetime'
+  | 'daterange'
+  | 'datetimerange'
 export interface IFormItem {
   // 表单类型
   type: IFormItemType
@@ -7,6 +15,7 @@ export interface IFormItem {
   // 表单和fromData对应的字段名
   field: string
   placeholder?: string
+  default?: any
   // 针对select
   options?: any[]
   // 表单项是否显示

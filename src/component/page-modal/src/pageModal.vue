@@ -3,7 +3,7 @@
     <el-dialog
       v-model="dialogVisible"
       :title="dialogConfig.title"
-      width="30%"
+      :width="width"
       center
     >
       <JPForm
@@ -64,6 +64,10 @@ export default defineComponent({
     moduleName: {
       type: String,
       required: true
+    },
+    width: {
+      type: String,
+      default: '30%'
     }
   },
   setup(props) {
@@ -72,14 +76,14 @@ export default defineComponent({
     const dialogVisible = ref(false)
     const formData: ICommonObj = ref({})
     props.dialogConfig.formConfig.formItems.forEach((item) => {
-      formData.value[item.field] = ''
+      formData.value[item.field] = item?.default ?? ''
     })
     // 给表单赋值
     watch(
       () => props.modalFormDetail,
       (val: any) => {
         props.dialogConfig.formConfig.formItems.forEach((item) => {
-          formData.value[item.field] = val[item.field] ?? ''
+          formData.value[item.field] = val[item.field] ?? item?.default ?? ''
         })
         if (formRef.value) {
           formRef.value.curFormData = formData.value

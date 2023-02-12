@@ -48,9 +48,16 @@
                   ></el-option>
                 </el-select>
               </template>
-              <template v-else-if="item.type === 'datepicker'">
+              <template
+                v-else-if="
+                  ['date', 'daterange', 'datetime', 'datetimerange'].includes(
+                    item.type
+                  )
+                "
+              >
                 <el-date-picker
                   :disabled="item.readonly"
+                  :type="item.type"
                   style="width: 100%"
                   v-bind="item.otherOptions"
                   v-model="curFormData[item.field]"

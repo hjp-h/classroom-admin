@@ -24,7 +24,7 @@ export const searchFormConfig: IForm = {
     },
     {
       field: 'createAt',
-      type: 'datepicker',
+      type: 'date',
       label: '创建时间',
       otherOptions: {
         format: 'YYYY/MM/DD',
@@ -33,7 +33,7 @@ export const searchFormConfig: IForm = {
     },
     {
       field: 'updateAt',
-      type: 'datepicker',
+      type: 'date',
       label: '更新时间',
       otherOptions: {
         format: 'YYYY/MM/DD',

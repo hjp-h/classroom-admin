@@ -52,7 +52,7 @@ export const searchFormConfig: IForm = {
     },
     {
       field: 'expect_time',
-      type: 'datepicker',
+      type: 'date',
       label: '期待维修时间',
       placeholder: '请选择期待时间'
     },
@@ -84,7 +84,7 @@ export const searchFormConfig: IForm = {
     },
     {
       field: 'createAt',
-      type: 'datepicker',
+      type: 'date',
       label: '创建时间',
       otherOptions: {
         format: 'YYYY/MM/DD',

@@ -10,6 +10,7 @@ import suggestion from './modules/main/suggestion/suggestion'
 import maintenance from './modules/main/maintenance/maintenance'
 import goodsApply from './modules/main/goodsApply/goodsApply'
 import comment from './modules/main/comment/comment'
+import classroom from './modules/main/classroom'
 // 请求相关
 import { getPageList } from '@/service/main/system/system'
 // 缓存
@@ -62,7 +63,8 @@ const store = createStore<IRootState>({
     suggestion,
     maintenance,
     goodsApply,
-    comment
+    comment,
+    classroom
   }
 })
 // 解决页面刷新 vuex无数据的问题

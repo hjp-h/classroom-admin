@@ -55,7 +55,7 @@ export const getDialogConfig = (readonly = false): IDialogConfig => ({
       },
       {
         field: 'expectedTime',
-        type: 'datepicker',
+        type: 'date',
         label: '期待维修时间',
         placeholder: '请选择期待时间',
         readonly
