@@ -30,3 +30,10 @@ export function editPageList(url: string, data: ICommonObj) {
     data
   })
 }
+
+export function getAllUserListReq(data: ICommonObj) {
+  return jpRequest.get<IDataType>({
+    url: '/users/list',
+    data
+  })
+}

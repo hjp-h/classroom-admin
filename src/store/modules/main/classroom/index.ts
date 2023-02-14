@@ -8,7 +8,7 @@ import {
   delPageList,
   addPageList,
   editPageList
-} from '@/service/main/goodsApply/goodsApply'
+} from '@/service/main/classroom'
 // 工具类
 import { showMessage } from '@/utils/message'
 const noticeModule: Module<IClassroomApplyState, IRootState> = {

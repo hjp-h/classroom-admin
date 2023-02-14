@@ -2,12 +2,16 @@
 import { degreeList, urgentList } from './common.config'
 // type
 import { IForm } from '@/base-ui/form'
+import { ICommonObj } from '@/global/type'
 interface IDialogConfig {
   title: string
   formConfig: IForm
 }
-export const getDialogConfig = (readonly = false): IDialogConfig => ({
-  title: '新建物资申请单',
+export const getDialogConfig = (
+  readonly = false,
+  optionsMap: ICommonObj = {}
+): IDialogConfig => ({
+  title: '新建课室申请',
   formConfig: {
     itemStyle: {
       padding: '0px 10px'
@@ -24,16 +28,28 @@ export const getDialogConfig = (readonly = false): IDialogConfig => ({
             }
           ]
         : []),
-      {
-        field: 'name',
-        type: 'input',
-        otherOptions: {
-          rows: 2
-        },
-        label: '课室名称',
-        placeholder: '请输入课室名称',
-        readonly
-      },
+      ...(readonly
+        ? [
+            {
+              field: 'name',
+              type: 'input',
+              otherOptions: {
+                rows: 2
+              },
+              label: '课室名称',
+              placeholder: '请输入课室名称',
+              readonly
+            }
+          ]
+        : [
+            {
+              field: 'classroomId',
+              type: 'select',
+              label: '课室名称',
+              placeholder: '请选择课室名称',
+              options: optionsMap.classroomList ?? []
+            }
+          ]),
       {
         field: 'applicant',
         type: 'input',

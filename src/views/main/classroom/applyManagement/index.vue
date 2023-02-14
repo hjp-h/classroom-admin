@@ -1,7 +1,7 @@
 <template>
   <div class="user">
     <PageSearch
-      :searchFormConfig="searchFormConfig"
+      :searchFormConfig="getSearchFormConfig(optionsMap)"
       @handleReset="handleReset"
       @handleSearch="handleRealSearch"
     ></PageSearch>
@@ -68,13 +68,16 @@
 
 <script lang="ts">
 // vue api相关
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
 // 配置相关
-import { searchFormConfig } from './config/search-config'
+import { getSearchFormConfig } from './config/search-config'
 import { tableConfig } from './config/table-config'
 import { getDialogConfig } from './config/dialog-config'
 import { approveList, urgentList, degreeList } from './config/common.config'
+// service
+import { getClassroomListReq } from '@/service/main/classroom'
+import { getAllUserListReq } from '@/service/main/system/system'
 // 页面组件相关
 import PageSearch from '@/component/page-search'
 import PageTable from '@/component/page-table'
@@ -101,8 +104,27 @@ export default defineComponent({
         end: query?.useTime?.[1]
       })
     }
+
+    // 获取课室列表
+    const optionsMap = ref<ICommonObj>({})
+    const getClassroomList = async () => {
+      const { data } = await getClassroomListReq('/classroom/list', {})
+      return data
+    }
+    const getAllUserList = async () => {
+      const { data } = await getAllUserListReq({})
+      return data
+    }
+    onMounted(async () => {
+      const [classroomList, userList] = await Promise.all([
+        getClassroomList(),
+        getAllUserList()
+      ])
+      optionsMap.value = { ...optionsMap.value, classroomList, userList }
+    })
+
     // 因为要修改dialogConfig的配置项 所以得让它变成响应式的
-    const curDialogConfig = ref({ ...getDialogConfig() })
+    const curDialogConfig = ref({ ...getDialogConfig(false) })
 
     // 这部分是页面里面的逻辑 不要在hook中写死
     const isEdit = ref(false)
@@ -111,13 +133,13 @@ export default defineComponent({
         ...(modalFormDetail as any).value,
         useTime: `${data.start}~${data.end}`
       }
-      curDialogConfig.value = getDialogConfig(true)
+      curDialogConfig.value = getDialogConfig(true, optionsMap.value)
       curDialogConfig.value.title = '课室申请审批'
     }
     const addCallback = (): void => {
       isEdit.value = false
-      curDialogConfig.value = getDialogConfig()
-      curDialogConfig.value.title = '创建课室申请单'
+      curDialogConfig.value = getDialogConfig(false, optionsMap.value)
+      curDialogConfig.value.title = '新建课室申请'
       curDialogConfig.value.formConfig.formItems = (
         curDialogConfig.value.formConfig.formItems as []
       ).filter((item: any) => item.field !== 'applicant')
@@ -194,7 +216,8 @@ export default defineComponent({
     }
 
     return {
-      searchFormConfig,
+      getSearchFormConfig,
+      optionsMap,
       tableConfig,
       handleReset,
       handleRealSearch,

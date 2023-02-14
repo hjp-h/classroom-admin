@@ -1,6 +1,9 @@
 import { IForm } from '@/base-ui/form'
+import { ICommonObj } from '@/global/type'
 import { approveList, degreeList } from './common.config'
-export const searchFormConfig: IForm = {
+export const getSearchFormConfig: (options: ICommonObj) => IForm = (
+  options
+) => ({
   itemStyle: {
     padding: '10px 20px'
   },
@@ -15,10 +18,11 @@ export const searchFormConfig: IForm = {
       placeholder: '请输入课室名称，支持模糊查询'
     },
     {
-      field: 'applicant',
-      type: 'input',
+      field: 'applicantId',
+      type: 'select',
       label: '申请人',
-      placeholder: '请填写申请人'
+      placeholder: '请选择申请人',
+      options: options?.userList ?? []
     },
     {
       field: 'applyId',
@@ -56,4 +60,4 @@ export const searchFormConfig: IForm = {
       options: degreeList
     }
   ]
-}
+})
