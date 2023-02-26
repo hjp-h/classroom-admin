@@ -1,7 +1,7 @@
 // 类型相关
 import { IRootState } from '@/store/type'
 import { Module } from 'vuex'
-import { IClassroomApplyState, IPayLoadtype } from './type'
+import { IClassroomState, IPayLoadtype } from './type'
 // 请求相关
 import {
   getPageList,
@@ -11,20 +11,26 @@ import {
 } from '@/service/main/classroom'
 // 工具类
 import { showMessage } from '@/utils/message'
-const noticeModule: Module<IClassroomApplyState, IRootState> = {
+const classroomModule: Module<IClassroomState, IRootState> = {
   namespaced: true,
   state() {
     return {
       classroomApplyList: [],
-      classroomApplyCount: 0
+      classroomApplyCount: 0,
+      classroomQueryList: [],
+      classroomQueryCount: 0
     }
   },
   mutations: {
-    // 保存用户列表的数据
     saveClassroomApplyData(state, payLoad) {
       const { list, totalCount } = payLoad
       state.classroomApplyList = list
       state.classroomApplyCount = totalCount
+    },
+    saveClassroomQueryData(state, payLoad) {
+      const { list, totalCount } = payLoad
+      state.classroomQueryList = list
+      state.classroomQueryCount = totalCount
     }
   },
   actions: {
@@ -108,4 +114,4 @@ const noticeModule: Module<IClassroomApplyState, IRootState> = {
     }
   }
 }
-export default noticeModule
+export default classroomModule

@@ -1,4 +1,5 @@
 import { IForm } from '@/base-ui/form'
+import { ICommonObj } from '@/global/type'
 import {
   degreeList,
   maintainTypeList,
@@ -6,7 +7,9 @@ import {
   urgentList,
   approveList
 } from './common.config'
-export const searchFormConfig: IForm = {
+export const getSearchFormConfig: (options: ICommonObj) => IForm = (
+  options: ICommonObj
+) => ({
   itemStyle: {
     padding: '10px 20px'
   },
@@ -40,18 +43,19 @@ export const searchFormConfig: IForm = {
     {
       field: 'status',
       type: 'select',
-      label: '维修状态',
-      placeholder: '请选择维修状态',
+      label: '紧急程度',
+      placeholder: '请选择紧急程度',
       options: degreeList
     },
     {
-      field: 'location',
-      type: 'input',
-      label: '维修地点',
-      placeholder: '请填写维修地点'
+      field: 'classroomId',
+      type: 'select',
+      label: '课室',
+      placeholder: '请选择课室',
+      options: options?.classroomList ?? []
     },
     {
-      field: 'expect_time',
+      field: 'expectedTime',
       type: 'date',
       label: '期待维修时间',
       placeholder: '请选择期待时间'
@@ -95,4 +99,4 @@ export const searchFormConfig: IForm = {
   colLayout: {
     sm: 6
   }
-}
+})

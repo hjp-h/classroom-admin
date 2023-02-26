@@ -1,7 +1,7 @@
 <template>
   <div class="user">
     <PageSearch
-      :searchFormConfig="searchFormConfig"
+      :searchFormConfig="getSearchFormConfig(optionsMap)"
       @handleReset="handleReset"
       @handleSearch="handleSearch"
     ></PageSearch>
@@ -86,10 +86,10 @@
 
 <script lang="ts">
 // vue api相关
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { useStore } from 'vuex'
 // 配置相关
-import { searchFormConfig } from './config/search-config'
+import { getSearchFormConfig } from './config/search-config'
 import { tableConfig } from './config/table-config'
 import { getDialogConfig } from './config/dialog-config'
 import {
@@ -109,6 +109,8 @@ import usePageSearch from '@/hooks/usePageSearch'
 import usePageModal from '@/hooks/usePageModal'
 // service 获取用户列表
 import { getPageList } from '../../../../service/main/system/system'
+import { getClassroomListReq } from '@/service/main/classroom'
+import { ICommonObj } from '@/global/type'
 export default defineComponent({
   name: 'user',
   components: {
@@ -117,9 +119,21 @@ export default defineComponent({
     PageModal
   },
   setup() {
+    // 获取下拉选项
+    const optionsMap = ref<ICommonObj>({})
+    const getClassroomList = async () => {
+      const { data } = await getClassroomListReq({})
+      return data
+    }
+
+    onMounted(async () => {
+      const classroomList = await getClassroomList()
+      optionsMap.value = { ...optionsMap.value, classroomList }
+    })
+
     const [tableRef, handleReset, handleSearch] = usePageSearch()
     // 因为要修改dialogConfig的配置项 所以得让它变成响应式的
-    const curDialogConfig = ref({ ...getDialogConfig() })
+    const curDialogConfig = ref({ ...getDialogConfig(false, optionsMap.value) })
 
     // 获取维修工列表
     let processorList: any[] = []
@@ -139,7 +153,7 @@ export default defineComponent({
     const editCallback = (): void => {
       isEdit.value = true
       isCheck.value = false
-      curDialogConfig.value = getDialogConfig(true)
+      curDialogConfig.value = getDialogConfig(true, optionsMap.value)
       curDialogConfig.value.title = '维修单审批'
       const processorItem: any = (
         curDialogConfig.value.formConfig.formItems as []
@@ -148,14 +162,14 @@ export default defineComponent({
     }
     const addCallback = (): void => {
       isEdit.value = false
-      curDialogConfig.value = getDialogConfig()
+      curDialogConfig.value = getDialogConfig(false, optionsMap.value)
       curDialogConfig.value.title = '新建维修单'
     }
     const isCheck = ref(false)
     const checkCallback = (): void => {
       isEdit.value = false
       isCheck.value = true
-      curDialogConfig.value = getDialogConfig(true)
+      curDialogConfig.value = getDialogConfig(true, optionsMap.value)
       curDialogConfig.value.title = '完工确认'
       const processorItem: any = (
         curDialogConfig.value.formConfig.formItems as []
@@ -246,7 +260,7 @@ export default defineComponent({
     }
 
     return {
-      searchFormConfig,
+      getSearchFormConfig,
       tableConfig,
       handleReset,
       handleSearch,
@@ -267,7 +281,8 @@ export default defineComponent({
       handleClose,
       isEdit,
       authority,
-      handleCheckClick
+      handleCheckClick,
+      optionsMap
     }
   }
 })

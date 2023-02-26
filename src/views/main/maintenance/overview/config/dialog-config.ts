@@ -1,12 +1,16 @@
 // type
 import { IForm } from '@/base-ui/form'
+import { ICommonObj } from '@/global/type'
 // config
 import { degreeList, maintainTypeList, urgentList } from './common.config'
 interface IDialogConfig {
   title: string
   formConfig: IForm
 }
-export const getDialogConfig = (readonly = false): IDialogConfig => ({
+export const getDialogConfig = (
+  readonly = false,
+  options: ICommonObj
+): IDialogConfig => ({
   title: '新建维修单',
   formConfig: {
     itemStyle: {
@@ -47,10 +51,11 @@ export const getDialogConfig = (readonly = false): IDialogConfig => ({
         readonly
       },
       {
-        field: 'location',
-        type: 'input',
-        label: '维修地点',
-        placeholder: '请填写维修地点',
+        field: 'classroomId',
+        type: 'select',
+        label: '课室',
+        placeholder: '请选择课室',
+        options: options?.classroomList ?? [],
         readonly
       },
       {

@@ -16,7 +16,7 @@ export const tableConfig = {
     { prop: 'status', label: '维修状态', minWidth: '100' },
     { prop: 'approve', label: '审批状态', minWidth: '100' },
     { prop: 'degree', label: '紧急程度', minWidth: '100' },
-    { prop: 'location', label: '维修位置', minWidth: '100' },
+    { prop: 'classroom', label: '课室', minWidth: '100' },
     { prop: 'expectedTime', label: '期待时间', minWidth: '100' },
     { prop: 'applicant', label: '申请人', minWidth: '100' },
     { prop: 'processor', label: '维修人', minWidth: '100' },

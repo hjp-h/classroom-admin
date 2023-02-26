@@ -9,22 +9,10 @@
       ref="tableRef"
       :authority="authority"
       :tableConfig="tableConfig"
-      pageName="classroomApply"
+      pageName="classroomQuery"
       moduleName="classroom"
       @addClick="handleAddClick"
     >
-      <template #approve="{ row }">
-        {{ formatApprove(row.approve ?? '') }}
-      </template>
-      <template #useTime="{ row }">
-        {{ row.start + '~' + row.end }}
-      </template>
-      <template #degree="{ row }">
-        {{ formatDegree(row.degree ?? '') }}
-      </template>
-      <template #isUrgent="{ row }">
-        {{ formatUrgent(row.isUrgent ?? '') }}
-      </template>
       <template #operate="{ row }">
         <el-button
           v-if="row.approve === 0 && authority.update"
@@ -40,13 +28,13 @@
           size="small"
           type="danger"
           @click="handleDel(row)"
-          >{{ row.approve === 0 ? '撤回' : '删除' }}</el-button
+          >删除</el-button
         >
       </template>
     </PageTable>
     <PageModal
       ref="modalRef"
-      pageName="classroomApply"
+      pageName="classroomQuery"
       moduleName="classroom"
       width="32%"
       :dialogConfig="curDialogConfig"
@@ -74,7 +62,6 @@ import { useStore } from 'vuex'
 import { getSearchFormConfig } from './config/search-config'
 import { tableConfig } from './config/table-config'
 import { getDialogConfig } from './config/dialog-config'
-import { approveList, urgentList, degreeList } from './config/common.config'
 // service
 import { getClassroomListReq } from '@/service/main/classroom'
 import { getAllUserListReq } from '@/service/main/system/system'
@@ -107,21 +94,6 @@ export default defineComponent({
 
     // 获取课室列表
     const optionsMap = ref<ICommonObj>({})
-    const getClassroomList = async () => {
-      const { data } = await getClassroomListReq({})
-      return data
-    }
-    const getAllUserList = async () => {
-      const { data } = await getAllUserListReq({})
-      return data
-    }
-    onMounted(async () => {
-      const [classroomList, userList] = await Promise.all([
-        getClassroomList(),
-        getAllUserList()
-      ])
-      optionsMap.value = { ...optionsMap.value, classroomList, userList }
-    })
 
     // 因为要修改dialogConfig的配置项 所以得让它变成响应式的
     const curDialogConfig = ref({ ...getDialogConfig(false) })
@@ -133,13 +105,13 @@ export default defineComponent({
         ...(modalFormDetail as any).value,
         useTime: `${data.start}~${data.end}`
       }
-      curDialogConfig.value = getDialogConfig(true, optionsMap.value)
-      curDialogConfig.value.title = '课室申请审批'
+      curDialogConfig.value = getDialogConfig(true)
+      curDialogConfig.value.title = '课室信息修改'
     }
     const addCallback = (): void => {
       isEdit.value = false
-      curDialogConfig.value = getDialogConfig(false, optionsMap.value)
-      curDialogConfig.value.title = '新建课室申请'
+      curDialogConfig.value = getDialogConfig(false)
+      curDialogConfig.value.title = '新建课室'
       curDialogConfig.value.formConfig.formItems = (
         curDialogConfig.value.formConfig.formItems as []
       ).filter((item: any) => item.field !== 'applicant')
@@ -147,24 +119,14 @@ export default defineComponent({
     const [modalRef, modalFormDetail, handleAddClick, handleEditClick] =
       usePageModal(addCallback, editCallback)
     // 权限
-    const authority = usePermission('system', 'classroomApply')
-    // 格式化type
-    const formatApprove = (val: number): string => {
-      return approveList.find((item) => item.value === val)?.label ?? ''
-    }
-    const formatDegree = (val: number): string => {
-      return degreeList.find((item) => item.value === val)?.label ?? ''
-    }
-    const formatUrgent = (val: number): string => {
-      return urgentList.find((item) => item.value === val)?.label ?? ''
-    }
+    const authority = usePermission('system', 'classroom')
 
     // 删除逻辑
     // 删除页面的数据
     const store = useStore()
     const handleDel = (data: any) => {
       store.dispatch(`classroom/delDataListAction`, {
-        pageName: 'classroomApply',
+        pageName: 'classroomQuery',
         query: {
           id: data.id
         }
@@ -187,7 +149,7 @@ export default defineComponent({
       }
       if (isEdit.value) {
         store.dispatch(`classroom/editDataListAction`, {
-          pageName: 'classroomApply',
+          pageName: 'classroomQuery',
           id: modalFormDetail1?.value?.id,
           query: {
             approve
@@ -196,12 +158,9 @@ export default defineComponent({
       } else {
         const formData = modalRef1?.value?.formData ?? {}
         store.dispatch(`classroom/addDataListAction`, {
-          pageName: 'classroomApply',
+          pageName: 'classroomQuery',
           query: {
-            ...formData,
-            useTime: undefined,
-            start: formData?.useTime?.[0],
-            end: formData?.useTime?.[1]
+            ...formData
           }
         })
       }
@@ -227,9 +186,6 @@ export default defineComponent({
       handleAddClick,
       handleEditClick,
       modalFormDetail,
-      formatApprove,
-      formatDegree,
-      formatUrgent,
       handleDel,
       handleRefuse,
       handleConfirm,
