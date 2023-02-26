@@ -13,6 +13,7 @@
       >
       </JPForm>
       <slot></slot>
+      <slot name="tip"></slot>
       <template #footer>
         <slot name="footer">
           <span class="dialog-footer">

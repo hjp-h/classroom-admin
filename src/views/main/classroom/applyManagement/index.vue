@@ -52,6 +52,11 @@
       :dialogConfig="curDialogConfig"
       :modalFormDetail="modalFormDetail"
     >
+      <template #tip>
+        <span style="color: red"
+          >使用时间段可到课室查询中根据空闲时间段查询来选择相应的时间</span
+        >
+      </template>
       <template #footer>
         <div v-if="isEdit">
           <el-button type="danger" @click="handleRefuse">拒绝</el-button>

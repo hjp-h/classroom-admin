@@ -31,6 +31,21 @@ export const getSearchFormConfig: (options: ICommonObj) => IForm = (
           label: '南苑'
         }
       ]
+    },
+    {
+      field: 'emptyTime',
+      type: 'datetimerange',
+      label: '空闲时间段',
+      // 默认选择最近两小时
+      default: [
+        new Date(),
+        new Date(new Date().setHours(new Date().getHours() + 2))
+      ],
+      placeholder: '请填写使用时间段',
+      otherOptions: {
+        format: 'YYYY-MM-DD HH:mm',
+        'value-format': 'YYYY-MM-DD HH:mm'
+      }
     }
   ]
 })

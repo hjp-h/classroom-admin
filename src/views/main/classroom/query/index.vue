@@ -86,9 +86,9 @@ export default defineComponent({
     const handleRealSearch = (query: ICommonObj) => {
       ;(handleSearch as any)({
         ...query,
-        useTime: undefined,
-        start: query?.useTime?.[0],
-        end: query?.useTime?.[1]
+        emptyTime: undefined,
+        start: query?.emptyTime?.[0],
+        end: query?.emptyTime?.[1]
       })
     }
 

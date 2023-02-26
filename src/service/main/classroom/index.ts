@@ -5,7 +5,7 @@ export function getClassroomListReq(data: ICommonObj): Promise<IDataType> {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (resolve) => {
     const { data: res } = await jpRequest.post<IDataType>({
-      url: '/classroom/list',
+      url: '/classroomQuery/list',
       data
     })
     resolve({
